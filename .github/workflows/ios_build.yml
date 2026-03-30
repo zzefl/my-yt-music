@@ -16,18 +16,18 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Create Web Dist
+      - name: Web Build
         run: |
           mkdir -p dist
-          # Если index.html в корне, копируем в dist
-          cp index.html dist/ || true 
+          # Копируем всё из корня в dist, чтобы Capacitor не ругался
+          cp index.html dist/ || true
           cp -r *.js dist/ || true
           cp -r *.css dist/ || true
 
       - name: Capacitor Sync
         run: npx cap sync ios
 
-      - name: Build
+      - name: Build Archive
         run: |
           cd ios/App
           xcodebuild -scheme App -destination 'generic/platform=iOS' -archivePath App.xcarchive archive
