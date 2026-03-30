@@ -21,6 +21,9 @@ jobs:
 
       - name: Capacitor Sync
         run: |
+          # Принудительно ставим пакет платформы
+          npm install @capacitor/android
+          # Добавляем платформу, если её нет, и синхронизируем
           npx cap add android || true
           npx cap sync android
 
