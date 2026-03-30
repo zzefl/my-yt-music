@@ -1,8 +1,10 @@
 {
   "appId": "com.forelock.ytmusic",
-  "appName": "YouTube-PC",
+  "appName": "YT Music Pear",
   "webDir": "dist",
-  "ios": {
-    "scheme": "App"
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://music.youtube.com/",
+    "allowNavigation": ["music.youtube.com"]
   }
 }

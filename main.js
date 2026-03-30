@@ -14,7 +14,7 @@ function createWindow () {
   })
   mainWindow.setMenuBarVisibility(false);
   // and load the index.html of the app.
-  mainWindow.loadURL('https://mospolytech-tuchkovo.ru/')
+  mainWindow.loadURL('https://music.youtube.com/')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
