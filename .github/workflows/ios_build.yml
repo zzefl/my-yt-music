@@ -1,9 +1,12 @@
-name: iOS Build
-on: [push]
+name: Android Build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой на GitHub
 
 jobs:
-  build:
-    runs-on: macos-latest
+  build-android:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,25 +19,19 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Web Build
-        run: |
-          mkdir -p dist
-          # Копируем всё из корня в dist, чтобы Capacitor не ругался
-          cp index.html dist/ || true
-          cp -r *.js dist/ || true
-          cp -r *.css dist/ || true
-
       - name: Capacitor Sync
-        run: npx cap sync ios
-
-      - name: Build For Simulator
         run: |
-          cd ios/App
-          xcodebuild -scheme App -destination 'generic/platform=iOS Simulator' -derivedDataPath build
-          # Эта команда не требует сертификатов и "Team ID"
+          npx cap add android || true
+          npx cap sync android
 
-      - name: Export Artifacts
+      - name: Build Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ios-app
-          path: ios/App/build/Build/Products/Debug-iphonesimulator/App.app
+          name: android-app
+          path: android/app/build/outputs/apk/debug/app-debug.apk
