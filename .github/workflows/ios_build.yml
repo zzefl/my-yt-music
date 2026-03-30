@@ -1,0 +1,33 @@
+name: iOS Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Create Web Dist
+        run: |
+          mkdir -p dist
+          # Если index.html в корне, копируем в dist
+          cp index.html dist/ || true 
+          cp -r *.js dist/ || true
+          cp -r *.css dist/ || true
+
+      - name: Capacitor Sync
+        run: npx cap sync ios
+
+      - name: Build
+        run: |
+          cd ios/App
+          xcodebuild -scheme App -destination 'generic/platform=iOS' -archivePath App.xcarchive archive
