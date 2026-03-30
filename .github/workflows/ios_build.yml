@@ -17,10 +17,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Set up Node.js
+      - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22' # Поднимаем до версии, которую требует Capacitor
 
       - name: Install Dependencies
         run: npm install
