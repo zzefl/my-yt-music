@@ -1,0 +1,55 @@
+name: Build Pear Mobile & Desktop
+
+on:
+  push:
+    branches: [ master, main ] # Добавил master, так как в твоем новом коде основная ветка master
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Vite Build
+        run: pnpm build
+
+      - name: Capacitor Sync
+        run: |
+          pnpm add @capacitor/android
+          npx cap add android || true
+          npx cap sync android
+
+      - name: Build Debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: pear-mobile-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
