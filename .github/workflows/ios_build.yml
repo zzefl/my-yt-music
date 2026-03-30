@@ -27,7 +27,14 @@ jobs:
       - name: Capacitor Sync
         run: npx cap sync ios
 
-      - name: Build Archive
+      - name: Build For Simulator
         run: |
           cd ios/App
-          xcodebuild -scheme App -destination 'generic/platform=iOS' -archivePath App.xcarchive archive
+          xcodebuild -scheme App -destination 'generic/platform=iOS Simulator' -derivedDataPath build
+          # Эта команда не требует сертификатов и "Team ID"
+
+      - name: Export Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: ios/App/build/Build/Products/Debug-iphonesimulator/App.app
