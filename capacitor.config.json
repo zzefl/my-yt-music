@@ -1,0 +1,8 @@
+{
+  "appId": "com.forelock.ytmusic",
+  "appName": "YouTube-PC",
+  "webDir": "dist",
+  "ios": {
+    "scheme": "App"
+  }
+}
